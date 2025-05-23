@@ -94,10 +94,11 @@ void RdmaQueuePair::SetTimeout(Time v) { m_timeout = v; }
 uint64_t RdmaQueuePair::GetBytesLeft() {
     if (irn.m_enabled) {
         uint32_t sack_seq, sack_sz;
-        if (irn.m_sack.peekFrontBlock(&sack_seq, &sack_sz)) {
+        if (irn.m_sack.peekFrontBlock(&sack_seq, &sack_sz, snd_nxt)) {
+        // if (irn.m_sack.peekFrontBlock(&sack_seq, &sack_sz)) {
             if (snd_nxt == sack_seq) {
                 snd_nxt += sack_sz;
-                irn.m_sack.discardUpTo(snd_nxt);
+                // irn.m_sack.discardUpTo(snd_nxt);
             }
         }
     }
@@ -163,10 +164,11 @@ uint64_t RdmaQueuePair::HpGetCurWin() {
 bool RdmaQueuePair::IsFinished() {
     if (irn.m_enabled) {
         uint32_t sack_seq, sack_sz;
-        if (irn.m_sack.peekFrontBlock(&sack_seq, &sack_sz)) {
+        if (irn.m_sack.peekFrontBlock(&sack_seq, &sack_sz, snd_nxt)) {
+        // if (irn.m_sack.peekFrontBlock(&sack_seq, &sack_sz)) {
             if (snd_nxt == sack_seq) {
                 snd_nxt += sack_sz;
-                irn.m_sack.discardUpTo(snd_nxt);
+                // irn.m_sack.discardUpTo(snd_nxt);
             }
         }
     }
@@ -188,7 +190,8 @@ RdmaRxQueuePair::RdmaRxQueuePair() {
     ReceiverNextExpectedSeq = 0;
     m_nackTimer = Time(0);
     m_milestone_rx = 0;
-    m_lastNACK = 0;
+    m_lastNACK = -1;
+    m_buffer = 128;
 }
 
 uint32_t RdmaRxQueuePair::GetHash(void) {
@@ -361,6 +364,25 @@ bool IrnSackManager::blockExists(uint32_t seq, uint32_t size) {
     }
     return false;
 }
+
+bool IrnSackManager::peekFrontBlock(uint32_t* pseq, uint32_t* psize, uint32_t seq) {
+    NS_ASSERT(pseq);
+    NS_ASSERT(psize);
+
+    auto it = m_data.begin();
+    for (; it != m_data.end(); ++it) {
+        if (it->first <= seq && it->first + it->second > seq) {
+						*pseq = seq;
+						*psize = it->first + it->second - seq;
+						return true;
+        }
+    }
+
+		*pseq = 0;
+		*psize = 0;
+		return false;
+}
+
 bool IrnSackManager::peekFrontBlock(uint32_t* pseq, uint32_t* psize) {
     NS_ASSERT(pseq);
     NS_ASSERT(psize);

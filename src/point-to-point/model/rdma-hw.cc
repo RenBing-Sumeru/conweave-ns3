@@ -309,6 +309,11 @@ int RdmaHw::ReceiveUdp(Ptr<Packet> p, CustomHeader &ch) {
         }
     }
 
+		// if (ch.udp.sport == 11519 && ch.udp.dport == 1550) {
+		// 	  std::cerr << "[ReceiveUdp] " << ch.udp.seq << " " << rxQp->ReceiverNextExpectedSeq 
+		// 			<< " " << payload_size << std::endl;
+		// }
+
     if (ecnbits != 0) {
         rxQp->m_ecn_source.ecnbits |= ecnbits;
         rxQp->m_ecn_source.qfb++;
@@ -327,7 +332,7 @@ int RdmaHw::ReceiveUdp(Ptr<Packet> p, CustomHeader &ch) {
     bool cnp_check = false;
     int x = ReceiverCheckSeq(ch.udp.seq, rxQp, payload_size, cnp_check);
 
-    if (x == 1 || x == 2 || x == 6) {  // generate ACK or NACK
+    if (x == 1 || x == 2 || x == 3 || x == 6) {  // generate ACK or NACK
         qbbHeader seqh;
         seqh.SetSeq(rxQp->ReceiverNextExpectedSeq);
         seqh.SetPG(ch.udp.pg);
@@ -336,9 +341,15 @@ int RdmaHw::ReceiveUdp(Ptr<Packet> p, CustomHeader &ch) {
         seqh.SetIntHeader(ch.udp.ih);
 
         if (m_irn) {
-            if (x == 2) {
+            if (x == 3) {
                 seqh.SetIrnNack(ch.udp.seq);
                 seqh.SetIrnNackSize(payload_size);
+            } else if (x == 2) {
+                seqh.SetIrnNack(ch.udp.seq);
+                seqh.SetIrnNackSize(0);
+
+								// std::cerr << "[NACK] " << ch.udp.dport << " " << ch.udp.sport << " " << 
+								// 	rxQp->ReceiverNextExpectedSeq << " " << ch.udp.seq << " " << payload_size << std::endl;
             } else {
                 seqh.SetIrnNack(0);  // NACK without ackSyndrome (ACK) in loss recovery mode
                 seqh.SetIrnNackSize(0);
@@ -461,6 +472,11 @@ int RdmaHw::ReceiveAck(Ptr<Packet> p, CustomHeader &ch) {
         }
     }
 
+		// if (ch.ack.dport == 11519 && ch.ack.sport == 1550) {
+		// 	  std::cerr << "[ReceiveAck] " << seq << " " << ch.ack.irnNack
+		// 			<< " " << ch.ack.irnNackSize << " " << qp->snd_una << std::endl;
+		// }
+
     uint32_t nic_idx = GetNicIdxOfQp(qp);
     Ptr<QbbNetDevice> dev = m_nic[nic_idx].dev;
 
@@ -528,13 +544,16 @@ int RdmaHw::ReceiveAck(Ptr<Packet> p, CustomHeader &ch) {
     }
 
     if (m_irn) {
-        if (ch.ack.irnNackSize != 0) {
+        if (ch.ack.irnNack != 0 && ch.ack.irnNackSize == 0) {
             if (!qp->irn.m_recovery) {
                 qp->irn.m_recovery_seq = qp->snd_nxt;
+
+								// std::cerr << "[RecoverQueue] " << ch.ack.sport << " " << ch.ack.dport << " " 
+								// 	<< ch.ack.seq << " " << ch.ack.irnNack << " " << ch.ack.irnNackSize << std::endl;
                 RecoverQueue(qp);
-                qp->irn.m_recovery = true;
+                // qp->irn.m_recovery = true;
             }
-        } else {
+        } else if (ch.ack.irnNack == 0 && ch.ack.irnNackSize == 0) {
             if (qp->irn.m_recovery) {
                 qp->irn.m_recovery = false;
             }
@@ -594,6 +613,7 @@ int RdmaHw::Receive(Ptr<Packet> p, CustomHeader &ch) {
  * 0: should not reach here
  * 1: generate ACK
  * 2: still in loss recovery of IRN
+ * 3: NACK but functionality is SACK
  * 4: OoO, but skip to send NACK as it is already NACKed.
  * 6: NACK but functionality is ACK (indicating all packets are received)
  */
@@ -617,7 +637,7 @@ int RdmaHw::ReceiverCheckSeq(uint32_t seq, Ptr<RdmaRxQueuePair> q, uint32_t size
                            // packet has been received)
             } else {
                 // should we put nack timer here
-                return 2;  // Still in loss recovery mode of IRN
+                return 3;  // Still in loss recovery mode of IRN
             }
             return 0;  // should not reach here
         }
@@ -634,7 +654,7 @@ int RdmaHw::ReceiverCheckSeq(uint32_t seq, Ptr<RdmaRxQueuePair> q, uint32_t size
         }
     } else if (seq > expected) {
         // Generate NACK
-        if (m_irn) {
+        if (m_irn && seq + size <= expected + m_mtu * q->m_buffer) {
             if (q->m_milestone_rx < seq + size) q->m_milestone_rx = seq + size;
 
             // if seq is already nacked, check for nacktimer
@@ -645,19 +665,26 @@ int RdmaHw::ReceiverCheckSeq(uint32_t seq, Ptr<RdmaRxQueuePair> q, uint32_t size
             q->m_irn_sack_.sack(seq, size);  // set SACK
             NS_ASSERT(q->m_irn_sack_.discardUpTo(expected) ==
                       0);  // SACK blocks must be larger than expected
-            cnp = true;    // XXX: out-of-order should accompany with CNP (?) TODO: Check on CX6
-            return 2;      // generate SACK
+            // cnp = true;    // XXX: out-of-order should accompany with CNP (?) TODO: Check on CX6
+            return 3;  // generate SACK
         }
         if (Simulator::Now() >= q->m_nackTimer || q->m_lastNACK != expected) {  // new NACK
             q->m_nackTimer = Simulator::Now() + MicroSeconds(m_nack_interval);
             q->m_lastNACK = expected;
-            if (m_backto0) {
+            if (m_backto0 && !m_irn) {
                 q->ReceiverNextExpectedSeq = q->ReceiverNextExpectedSeq / m_chunk * m_chunk;
             }
             cnp = true;  // XXX: out-of-order should accompany with CNP (?) TODO: Check on CX6
+
+						// if (q->dport == 11519 && q->sport == 1550) {
+						// 		std::cerr << "[ReceiverCheckSeq] " << seq << " " << size << " 2" << std::endl;
+						// }
             return 2;
         } else {
             // skip to send NACK
+						// if (q->dport == 11519 && q->sport == 1550) {
+						// 		std::cerr << "[ReceiverCheckSeq] " << seq << " " << size << " 4" << std::endl;
+						// }
             return 4;
         }
     } else {
@@ -672,7 +699,7 @@ int RdmaHw::ReceiverCheckSeq(uint32_t seq, Ptr<RdmaRxQueuePair> q, uint32_t size
                            // packet has been received)
             } else {
                 // should we put nack timer here
-                return 2;  // Still in loss recovery mode of IRN
+                return 3;  // Still in loss recovery mode of IRN
             }
         }
         // Duplicate.
@@ -787,6 +814,11 @@ Ptr<Packet> RdmaHw::GetNxtPacket(Ptr<RdmaQueuePair> qp) {
     PppHeader ppp;
     ppp.SetProtocol(0x0021);  // EtherToPpp(0x800), see point-to-point-net-device.cc
     p->AddHeader(ppp);
+
+		// if (qp->sport == 11519 && qp->dport == 1550) {
+		// 	  std::cerr << "[GetNxtPacket] " << qp->snd_nxt << " " << qp->snd_una 
+		// 			<< " " << payload_size << std::endl;
+		// }
 
     // attach Stat Tag
     uint8_t packet_pos = UINT8_MAX;

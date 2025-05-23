@@ -85,6 +85,14 @@ uint32_t SwitchNode::DoLbFlowECMP(Ptr<const Packet> p, const CustomHeader &ch,
     return nexthops[idx];
 }
 
+/*-----------------RPS-----------------*/
+uint32_t SwitchNode::DoLbRPS(Ptr<const Packet> p, const CustomHeader &ch,
+                                  const std::vector<int> &nexthops) {
+    // pick one next hop based on randomness
+    uint32_t idx = rand() % nexthops.size();
+    return nexthops[idx];
+}
+
 /*-----------------CONGA-----------------*/
 uint32_t SwitchNode::DoLbConga(Ptr<Packet> p, CustomHeader &ch, const std::vector<int> &nexthops) {
     return DoLbFlowECMP(p, ch, nexthops);  // flow ECMP (dummy)
@@ -264,6 +272,8 @@ int SwitchNode::GetOutDev(Ptr<Packet> p, CustomHeader &ch) {
     }
 
     switch (Settings::lb_mode) {
+				case 1:
+            return DoLbRPS(p, ch, nexthops);
         case 2:
             return DoLbDrill(p, ch, nexthops);
         case 3:

@@ -45,6 +45,7 @@ class IrnSackManager {
     size_t discardUpTo(uint32_t seq);        // return number of blocks removed
     bool IsEmpty();
     bool blockExists(uint32_t seq, uint32_t size);  // query if block exists inside SACK table
+    bool peekFrontBlock(uint32_t *pseq, uint32_t *psize, uint32_t seq);
     bool peekFrontBlock(uint32_t *pseq, uint32_t *psize);
     size_t getSackBufferOverhead();  // get buffer overhead
 
@@ -180,9 +181,10 @@ class RdmaQueuePair : public Object {
     inline bool CanIrnTransmit(uint32_t mtu) const {
         uint64_t len_left = m_size >= snd_nxt ? m_size - snd_nxt : 0;
 
-        return !irn.m_enabled ||
-               (GetIrnBytesInFlight() + ((len_left > mtu) ? mtu : len_left)) < irn.m_bdp ||
-               (irn.m_highest_ack + irn.m_bdp > snd_nxt);
+        return true;
+        // return !irn.m_enabled ||
+        //        (GetIrnBytesInFlight() + ((len_left > mtu) ? mtu : len_left)) < irn.m_bdp ||
+        //        (irn.m_highest_ack + irn.m_bdp > snd_nxt);
     }
 };
 
@@ -207,6 +209,7 @@ class RdmaRxQueuePair : public Object {  // Rx side queue pair
     EventId QcnTimerEvent;  // if destroy this rxQp, remember to cancel this timer
     IrnSackManager m_irn_sack_;
     int32_t m_flow_id;
+    uint32_t m_buffer;
 
     static TypeId GetTypeId(void);
     RdmaRxQueuePair();

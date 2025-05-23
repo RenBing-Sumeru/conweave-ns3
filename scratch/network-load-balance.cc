@@ -1365,6 +1365,9 @@ int main(int argc, char *argv[]) {
     // manually type BDP
     std::map<std::string, uint32_t> topo2bdpMap;
     topo2bdpMap[std::string("leaf_spine_128_100G_OS2")] = 104000;  // RTT=8320
+    topo2bdpMap[std::string("leaf_spine_8_100G_OS2")] = 104000;  // RTT=8320
+    topo2bdpMap[std::string("leaf_spine_16_100G_OS1")] = 104000;  // RTT=8320
+    topo2bdpMap[std::string("leaf_spine_4_100G_OS1")] = 104000;  // RTT=8320
     topo2bdpMap[std::string("fat_k8_100G_OS2")] = 156000;      // RTT=12480 --> all 100G links
 
     // topology_file
