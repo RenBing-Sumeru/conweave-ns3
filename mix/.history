@@ -1,0 +1,233 @@
+05/26/25,859961515,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.01
+05/26/25,345790061,1,0,1000,4,16,64,400,1,0,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/859961515/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/859961515/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/859961515/config.txt'
+
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/345790061/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/345790061/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/345790061/config.txt'
+
+05/26/25,810281596,1,0,1000,4,16,64,400,1,0,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/810281596/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/810281596/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/810281596/config.txt'
+
+05/26/25,620712794,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/620712794/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/620712794/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/620712794/config.txt'
+
+05/26/25,451734677,1,0,1000,4,16,64,400,1,0,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/451734677/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/451734677/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/451734677/config.txt'
+
+05/26/25,522316632,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/522316632/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/522316632/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/522316632/config.txt'
+
+05/26/25,52237860,1,0,1000,4,16,64,400,1,0,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/52237860/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/52237860/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/52237860/config.txt'
+
+05/26/25,42771562,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/42771562/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/42771562/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/42771562/config.txt'
+
+05/26/25,394021573,1,0,1000,4,16,64,400,1,0,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/394021573/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/394021573/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/394021573/config.txt'
+
+05/26/25,902857417,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/902857417/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/902857417/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/902857417/config.txt'
+
+05/26/25,266674796,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/266674796/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/266674796/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/266674796/config.txt'
+
+05/26/25,837439493,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/837439493/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/837439493/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/837439493/config.txt'
+
+05/26/25,754582801,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/754582801/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/754582801/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/754582801/config.txt'
+
+05/26/25,48234742,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/48234742/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/48234742/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/48234742/config.txt'
+
+05/26/25,783717333,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,AliStorage2019,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/783717333/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/783717333/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/783717333/config.txt'
+
+05/26/25,639238996,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/639238996/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/639238996/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/639238996/config.txt'
+
+05/26/25,632808128,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/632808128/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/632808128/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/632808128/config.txt'
+
+05/26/25,536813604,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/536813604/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/536813604/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/536813604/config.txt'
+
+05/26/25,886198931,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/886198931/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/886198931/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/886198931/config.txt'
+
+05/26/25,60538728,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/60538728/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/60538728/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/60538728/config.txt'
+
+05/26/25,373272996,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/373272996/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/373272996/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/373272996/config.txt'
+
+05/26/25,295987526,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/295987526/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/295987526/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/295987526/config.txt'
+
+05/26/25,124369365,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/124369365/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/124369365/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/124369365/config.txt'
+
+05/26/25,113904482,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/113904482/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/113904482/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/113904482/config.txt'
+
+05/26/25,302946096,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/302946096/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/302946096/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/302946096/config.txt'
+
+05/26/25,263420338,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/263420338/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/263420338/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/263420338/config.txt'
+
+05/26/25,177755956,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/177755956/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/177755956/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/177755956/config.txt'
+
+05/26/25,890147179,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/890147179/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/890147179/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/890147179/config.txt'
+
+05/26/25,919446171,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/919446171/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/919446171/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/919446171/config.txt'
+
+05/26/25,832971794,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/832971794/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/832971794/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/832971794/config.txt'
+
+05/26/25,676831248,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/676831248/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/676831248/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/676831248/config.txt'
+
+05/27/25,257639951,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.006
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/257639951/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/257639951/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/257639951/config.txt'
+
+05/27/25,652310202,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/652310202/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/652310202/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/652310202/config.txt'
+
+05/27/25,896025263,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/896025263/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/896025263/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/896025263/config.txt'
+
+05/27/25,383454354,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/383454354/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/383454354/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/383454354/config.txt'
+
+05/27/25,605639866,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/605639866/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/605639866/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/605639866/config.txt'
+
+05/27/25,817948746,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_16_100G_OS1,100,all2allv,90,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/817948746/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/817948746/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/817948746/config.txt'
+
+05/27/25,512437247,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,90,0.005
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/512437247/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/512437247/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/512437247/config.txt'
+
+05/27/25,75306003,1,1,1000,4,16,64,400,1,1,0,0,fat_k4_100G_OS2,100,all2allv,90,0.005
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/75306003/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/75306003/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/75306003/config.txt'
+
+05/27/25,28428403,1,1,1000,4,16,64,400,1,1,0,0,fat_k4_100G_OS2,100,all2allv,90,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/28428403/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/28428403/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/28428403/config.txt'
+
+05/27/25,73264143,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS2,100,all2allv,90,0.005
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/73264143/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/73264143/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/73264143/config.txt'
+
+05/27/25,683278227,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/683278227/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/683278227/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/683278227/config.txt'
+
+05/27/25,210042118,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/210042118/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/210042118/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/210042118/config.txt'
+
+05/27/25,672310515,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/672310515/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/672310515/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/672310515/config.txt'
+
+05/27/25,229860679,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/229860679/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/229860679/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/229860679/config.txt'
+
+05/27/25,603060144,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.02
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/603060144/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/603060144/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/603060144/config.txt'
+
+05/28/25,402837758,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,30,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/402837758/config.txt' > /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/402837758/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-allinone-3.19/ns-3.19/mix/output/402837758/config.txt'
+
+05/28/25,447228056,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,10,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/447228056/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/447228056/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/447228056/config.txt'
+
+05/28/25,190409474,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,10,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/190409474/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/190409474/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/190409474/config.txt'
+
+05/28/25,19308646,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,30,0.01
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/19308646/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/19308646/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/19308646/config.txt'
+
+05/28/25,580819169,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.002
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/580819169/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/580819169/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/580819169/config.txt'
+
+05/28/25,502288912,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,20,0.001
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/502288912/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/502288912/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/502288912/config.txt'
+
+05/28/25,932548079,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,20,0.001
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/932548079/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/932548079/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/932548079/config.txt'
+
+05/28/25,699864157,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.002
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/699864157/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/699864157/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/699864157/config.txt'
+
+05/28/25,636707868,1,1,1000,4,16,64,400,1,1,0,0,fat_k8_100G_OS1,100,all2allv,50,0.002
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/636707868/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/636707868/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/636707868/config.txt'
+
+05/28/25,877656208,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_64_100G_OS1,100,all2allv,100,0.002
+05/28/25,383004510,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_64_100G_OS1,100,all2allv,100,0.002
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/383004510/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/383004510/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/383004510/config.txt'
+
+05/28/25,929653792,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_64_100G_OS1,100,all2allv,100,0.002
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/929653792/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/929653792/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/929653792/config.txt'
+
+05/28/25,365253481,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_64_100G_OS1,100,all2allv,100,0.002
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/365253481/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/365253481/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/365253481/config.txt'
+

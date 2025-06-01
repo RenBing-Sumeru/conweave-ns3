@@ -3,6 +3,8 @@
 
 #include <ns3/node.h>
 
+#include <map>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -17,7 +19,7 @@ class SwitchNode : public Node {
     static const unsigned qCnt = 8;    // Number of queues/priorities used
     static const unsigned pCnt = 128;  // port 0 is not used so + 1	// Number of ports used
     uint32_t m_ecmpSeed;
-    std::unordered_map<uint32_t, std::vector<int> >
+    std::unordered_map<uint32_t, std::vector<int>>
         m_rtTable;  // map from ip address (u32) to possible ECMP port (index of dev)
 
     // monitor uplinks
@@ -44,8 +46,7 @@ class SwitchNode : public Node {
     uint32_t DoLbFlowECMP(Ptr<const Packet> p, const CustomHeader &ch,
                           const std::vector<int> &nexthops);
     // Random Packet Spraying (lb_mode = 1)
-    uint32_t DoLbRPS(Ptr<const Packet> p, const CustomHeader &ch,
-                          const std::vector<int> &nexthops);
+    uint32_t DoLbRPS(Ptr<const Packet> p, const CustomHeader &ch, const std::vector<int> &nexthops);
     // DRILL (lb_mode = 2)
     uint32_t DoLbDrill(Ptr<const Packet> p, const CustomHeader &ch,
                        const std::vector<int> &nexthops);     // choose egress port
@@ -58,13 +59,17 @@ class SwitchNode : public Node {
     uint32_t DoLbLetflow(Ptr<Packet> p, CustomHeader &ch, const std::vector<int> &nexthops);
     // ConWeave (lb_mode = 9)
     uint32_t DoLbConWeave(Ptr<const Packet> p, const CustomHeader &ch,
-                           const std::vector<int> &nexthops);  // dummy
+                          const std::vector<int> &nexthops);  // dummy
 
    public:
     // Ptr<BroadcomNode> m_broadcom;
     Ptr<SwitchMmu> m_mmu;
     bool m_isToR;                                 // true if ToR switch
     std::unordered_set<uint32_t> m_isToR_hostIP;  // host's IP connected to this ToR
+
+    std::map<std::tuple<uint32_t, uint32_t, uint16_t, uint16_t>, uint32_t> m_seq;
+    std::map<std::tuple<uint32_t, uint32_t, uint16_t, uint16_t>, std::map<uint32_t, uint32_t>>
+        m_delta;
 
     static TypeId GetTypeId(void);
     SwitchNode();

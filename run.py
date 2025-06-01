@@ -112,10 +112,13 @@ lb_modes = {
 
 topo2bdp = {
     "leaf_spine_128_100G_OS2": 104000,  # 2-tier -> all 100Gbps
+    "leaf_spine_64_100G_OS1": 104000,  # 2-tier -> all 100Gbps
     "leaf_spine_8_100G_OS2": 104000,  # 2-tier -> all 100Gbps
     "leaf_spine_16_100G_OS1": 104000,  # 2-tier -> all 100Gbps
     "leaf_spine_4_100G_OS1": 104000,  # 2-tier -> all 100Gbps
     "fat_k8_100G_OS2": 156000,  # 3-tier -> all 100Gbps
+    "fat_k4_100G_OS2": 156000,  # 3-tier -> all 100Gbps
+    "fat_k8_100G_OS1": 156000,  # 3-tier -> all 100Gbps
 }
 
 FLOWGEN_DEFAULT_TIME = 2.0  # see /traffic_gen/traffic_gen.py::base_t
@@ -209,7 +212,7 @@ def main():
     if enabled_irn == 0 and enabled_pfc == 0:
         raise Exception(
             "CONFIG ERROR : Either IRN or PFC should be true (at least one).")
-    if float(args.simul_time) < 0.005:
+    if float(args.simul_time) < 0.001:
         raise Exception("CONFIG ERROR : Runtime must be larger than 5ms (= warmup interval).")
 
     # sniff number of servers
@@ -217,7 +220,7 @@ def main():
         line = f_topo.readline().split(" ")
         n_host = int(line[0]) - int(line[1])
 
-    assert (hostload >= 0 and hostload < 100)
+    assert (hostload >= 0 and hostload <= 100)
     flow = "L_{load:.2f}_CDF_{cdf}_N_{n_host}_T_{time}ms_B_{bw}_flow".format(
         load=hostload, cdf=args.cdf, n_host=n_host, time=int(float(args.simul_time)*1000), bw=bw)
 
@@ -402,7 +405,7 @@ def main():
     ####################################################
     # NOTE: collect data except warm-up and cold-finish period
     fct_analysis_time_limit_begin = int(
-        flowgen_start_time * 1e9) + int(0.005 * 1e9)  # warmup
+        flowgen_start_time * 1e9) + int(0.001 * 1e9)  # warmup
     fct_analysistime_limit_end = int(
         flowgen_stop_time * 1e9) + int(0.05 * 1e9)  # extra term
 
@@ -418,7 +421,7 @@ def main():
         ################################################################
         # NOTE: collect data except warm-up and cold-finish period
         queue_analysis_time_limit_begin = int(
-            flowgen_start_time * 1e9) + int(0.005 * 1e9)  # warmup
+            flowgen_start_time * 1e9) + int(0.001 * 1e9)  # warmup
         queue_analysistime_limit_end = int(flowgen_stop_time * 1e9)
         print("Analyzing output Queue...")
         print("python3 queueAnalysis.py -id {config_ID} -dir {dir} -sT {queue_analysis_time_limit_begin} -fT {queue_analysistime_limit_end} > /dev/null 2>&1".format(

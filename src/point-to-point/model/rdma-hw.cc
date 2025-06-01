@@ -309,11 +309,6 @@ int RdmaHw::ReceiveUdp(Ptr<Packet> p, CustomHeader &ch) {
         }
     }
 
-		// if (ch.udp.sport == 11519 && ch.udp.dport == 1550) {
-		// 	  std::cerr << "[ReceiveUdp] " << ch.udp.seq << " " << rxQp->ReceiverNextExpectedSeq 
-		// 			<< " " << payload_size << std::endl;
-		// }
-
     if (ecnbits != 0) {
         rxQp->m_ecn_source.ecnbits |= ecnbits;
         rxQp->m_ecn_source.qfb++;
@@ -332,6 +327,12 @@ int RdmaHw::ReceiveUdp(Ptr<Packet> p, CustomHeader &ch) {
     bool cnp_check = false;
     int x = ReceiverCheckSeq(ch.udp.seq, rxQp, payload_size, cnp_check);
 
+    // if (ch.udp.sport == 10066 && ch.udp.dport == 161) {
+    //     std::cerr << "[ReceiveUdp] " << Simulator::Now() << " " << std::hex << ch.sip << " "
+    //               << ch.dip << " " << std::dec << ch.udp.sport << " " << ch.udp.dport << " "
+    //               << rxQp->ReceiverNextExpectedSeq << " " << ch.udp.seq << " " << x << std::endl;
+    // }
+
     if (x == 1 || x == 2 || x == 3 || x == 6) {  // generate ACK or NACK
         qbbHeader seqh;
         seqh.SetSeq(rxQp->ReceiverNextExpectedSeq);
@@ -348,8 +349,9 @@ int RdmaHw::ReceiveUdp(Ptr<Packet> p, CustomHeader &ch) {
                 seqh.SetIrnNack(ch.udp.seq);
                 seqh.SetIrnNackSize(0);
 
-								// std::cerr << "[NACK] " << ch.udp.dport << " " << ch.udp.sport << " " << 
-								// 	rxQp->ReceiverNextExpectedSeq << " " << ch.udp.seq << " " << payload_size << std::endl;
+                // std::cerr << "[NACK] " << ch.udp.dport << " " << ch.udp.sport << " " <<
+                // 	rxQp->ReceiverNextExpectedSeq << " " << ch.udp.seq << " " << payload_size <<
+                // std::endl;
             } else {
                 seqh.SetIrnNack(0);  // NACK without ackSyndrome (ACK) in loss recovery mode
                 seqh.SetIrnNackSize(0);
@@ -472,10 +474,10 @@ int RdmaHw::ReceiveAck(Ptr<Packet> p, CustomHeader &ch) {
         }
     }
 
-		// if (ch.ack.dport == 11519 && ch.ack.sport == 1550) {
-		// 	  std::cerr << "[ReceiveAck] " << seq << " " << ch.ack.irnNack
-		// 			<< " " << ch.ack.irnNackSize << " " << qp->snd_una << std::endl;
-		// }
+    // if (ch.ack.dport == 11519 && ch.ack.sport == 1550) {
+    // 	  std::cerr << "[ReceiveAck] " << seq << " " << ch.ack.irnNack
+    // 			<< " " << ch.ack.irnNackSize << " " << qp->snd_una << std::endl;
+    // }
 
     uint32_t nic_idx = GetNicIdxOfQp(qp);
     Ptr<QbbNetDevice> dev = m_nic[nic_idx].dev;
@@ -537,27 +539,43 @@ int RdmaHw::ReceiveAck(Ptr<Packet> p, CustomHeader &ch) {
      * packet, but rather simply detects the persistent absence of response
      * packets.
      * */
-    if (!qp->IsFinished() && qp->GetOnTheFly() > 0) {
-        if (qp->m_retransmit.IsRunning()) qp->m_retransmit.Cancel();
-        qp->m_retransmit = Simulator::Schedule(qp->GetRto(m_mtu), &RdmaHw::HandleTimeout, this, qp,
-                                               qp->GetRto(m_mtu));
-    }
+    // if (!qp->IsFinished() && qp->GetOnTheFly() > 0) {
+    //     if (qp->m_retransmit.IsRunning()) qp->m_retransmit.Cancel();
+    //     qp->m_retransmit = Simulator::Schedule(qp->GetRto(m_mtu), &RdmaHw::HandleTimeout, this,
+    //     qp,
+    //                                            qp->GetRto(m_mtu));
+    // }
 
     if (m_irn) {
-        if (ch.ack.irnNack != 0 && ch.ack.irnNackSize == 0) {
-            if (!qp->irn.m_recovery) {
-                qp->irn.m_recovery_seq = qp->snd_nxt;
+        // if (ch.ack.irnNackSize != 0) {
+        //     if (!qp->irn.m_recovery) {
+        //         qp->irn.m_recovery_seq = qp->snd_nxt;
+        //         RecoverQueue(qp);
+        //         qp->irn.m_recovery = true;
+        //     }
+        // } else {
+        //     if (qp->irn.m_recovery) {
+        //         qp->irn.m_recovery = false;
+        //     }
+        // }
 
-								// std::cerr << "[RecoverQueue] " << ch.ack.sport << " " << ch.ack.dport << " " 
-								// 	<< ch.ack.seq << " " << ch.ack.irnNack << " " << ch.ack.irnNackSize << std::endl;
-                RecoverQueue(qp);
-                // qp->irn.m_recovery = true;
+        if (ch.ack.irnNack != 0 && ch.ack.irnNackSize == 0) {
+            if (qp->snd_nxt > ch.ack.irnNack) {
+                qp->snd_nxt = ch.ack.irnNack;
             }
-        } else if (ch.ack.irnNack == 0 && ch.ack.irnNackSize == 0) {
-            if (qp->irn.m_recovery) {
-                qp->irn.m_recovery = false;
-            }
+        } else {
+            if (qp->m_retransmit.IsRunning()) qp->m_retransmit.Cancel();
+            qp->m_retransmit = Simulator::Schedule(qp->GetRto(m_mtu), &RdmaHw::HandleTimeout, this,
+                                                   qp, qp->GetRto(m_mtu));
         }
+
+        // if (ch.ack.dport == 10066 && ch.ack.sport == 161) {
+        //     std::cerr << "[ReceiveAck] " << Simulator::Now() << " " << std::hex << ch.dip << " "
+        //               << ch.sip << " " << std::dec << ch.ack.dport << " " << ch.ack.sport << " "
+        //               << ch.ack.seq << " " << ch.ack.irnNack << " " << ch.ack.irnNackSize << " "
+        //               << qp->m_retransmit.IsRunning() << " " << qp->m_retransmit.GetTs() << " "
+        //               << qp->GetRto(m_mtu) << std::endl;
+        // }
 
     } else if (ch.l3Prot == 0xFD)  // NACK
         RecoverQueue(qp);
@@ -565,7 +583,7 @@ int RdmaHw::ReceiveAck(Ptr<Packet> p, CustomHeader &ch) {
     // handle cnp
     if (cnp) {
         if (m_cc_mode == 1) {  // mlx version
-            cnp_received_mlx(qp);
+            // cnp_received_mlx(qp);
         }
     }
 
@@ -654,6 +672,7 @@ int RdmaHw::ReceiverCheckSeq(uint32_t seq, Ptr<RdmaRxQueuePair> q, uint32_t size
         }
     } else if (seq > expected) {
         // Generate NACK
+
         if (m_irn && seq + size <= expected + m_mtu * q->m_buffer) {
             if (q->m_milestone_rx < seq + size) q->m_milestone_rx = seq + size;
 
@@ -668,23 +687,30 @@ int RdmaHw::ReceiverCheckSeq(uint32_t seq, Ptr<RdmaRxQueuePair> q, uint32_t size
             // cnp = true;    // XXX: out-of-order should accompany with CNP (?) TODO: Check on CX6
             return 3;  // generate SACK
         }
-        if (Simulator::Now() >= q->m_nackTimer || q->m_lastNACK != expected) {  // new NACK
+
+        std::cerr << "[Generate NACK] " << Simulator::Now() << " " << std::hex << q->dip << " "
+                  << q->sip << " " << std::dec << q->dport << " " << q->sport << " " << expected
+                  << " " << seq << std::endl;
+
+        // if (Simulator::Now() >= q->m_nackTimer || q->m_lastNACK != expected) {  // new NACK
+        if (Simulator::Now() >= q->m_nackTimer || q->m_lastNACK != seq) {  // new NACK
             q->m_nackTimer = Simulator::Now() + MicroSeconds(m_nack_interval);
-            q->m_lastNACK = expected;
+            // q->m_lastNACK = expected;
+            q->m_lastNACK = seq;
             if (m_backto0 && !m_irn) {
                 q->ReceiverNextExpectedSeq = q->ReceiverNextExpectedSeq / m_chunk * m_chunk;
             }
-            cnp = true;  // XXX: out-of-order should accompany with CNP (?) TODO: Check on CX6
+            // cnp = true;  // XXX: out-of-order should accompany with CNP (?) TODO: Check on CX6
 
-						// if (q->dport == 11519 && q->sport == 1550) {
-						// 		std::cerr << "[ReceiverCheckSeq] " << seq << " " << size << " 2" << std::endl;
-						// }
+            // if (q->dport == 11519 && q->sport == 1550) {
+            // 		std::cerr << "[ReceiverCheckSeq] " << seq << " " << size << " 2" << std::endl;
+            // }
             return 2;
         } else {
             // skip to send NACK
-						// if (q->dport == 11519 && q->sport == 1550) {
-						// 		std::cerr << "[ReceiverCheckSeq] " << seq << " " << size << " 4" << std::endl;
-						// }
+            // if (q->dport == 11519 && q->sport == 1550) {
+            // 		std::cerr << "[ReceiverCheckSeq] " << seq << " " << size << " 4" << std::endl;
+            // }
             return 4;
         }
     } else {
@@ -815,10 +841,12 @@ Ptr<Packet> RdmaHw::GetNxtPacket(Ptr<RdmaQueuePair> qp) {
     ppp.SetProtocol(0x0021);  // EtherToPpp(0x800), see point-to-point-net-device.cc
     p->AddHeader(ppp);
 
-		// if (qp->sport == 11519 && qp->dport == 1550) {
-		// 	  std::cerr << "[GetNxtPacket] " << qp->snd_nxt << " " << qp->snd_una 
-		// 			<< " " << payload_size << std::endl;
-		// }
+    // if (qp->sport == 10066 && qp->dport == 161) {
+    //     std::cerr << "[GetNxtPacket] " << Simulator::Now() << " " << std::hex << qp->sip.Get()
+    //               << " " << qp->dip.Get() << " " << std::dec << qp->sport << " " << qp->dport <<
+    //               " "
+    //               << qp->snd_una << " " << qp->snd_nxt << std::endl;
+    // }
 
     // attach Stat Tag
     uint8_t packet_pos = UINT8_MAX;
@@ -873,14 +901,15 @@ void RdmaHw::PktSent(Ptr<RdmaQueuePair> qp, Ptr<Packet> pkt, Time interframeGap)
                   << "l3Prot:" << ch.l3Prot << ",at" << Simulator::Now() << std::endl;
 #endif
         RdmaHw::nAllPkts += 1;
-        if (ch.l3Prot == 0x11) {  // UDP
-            // Update Timer
-            if (qp->m_retransmit.IsRunning()) qp->m_retransmit.Cancel();
-            qp->m_retransmit = Simulator::Schedule(qp->GetRto(m_mtu), &RdmaHw::HandleTimeout, this,
-                                                   qp, qp->GetRto(m_mtu));
-        } else if (ch.l3Prot == 0xFC || ch.l3Prot == 0xFD || ch.l3Prot == 0xFF) {  // ACK, NACK, CNP
-        } else if (ch.l3Prot == 0xFE) {                                            // PFC
-        }
+        // if (ch.l3Prot == 0x11) {  // UDP
+        //     // Update Timer
+        //     if (qp->m_retransmit.IsRunning()) qp->m_retransmit.Cancel();
+        //     qp->m_retransmit = Simulator::Schedule(qp->GetRto(m_mtu), &RdmaHw::HandleTimeout,
+        //     this,
+        //                                            qp, qp->GetRto(m_mtu));
+        // } else if (ch.l3Prot == 0xFC || ch.l3Prot == 0xFD || ch.l3Prot == 0xFF) {  // ACK, NACK,
+        // CNP } else if (ch.l3Prot == 0xFE) {                                            // PFC
+        // }
     }
 }
 
@@ -895,15 +924,24 @@ void RdmaHw::HandleTimeout(Ptr<RdmaQueuePair> qp, Time rto) {
     Ptr<QbbNetDevice> dev = m_nic[nic_idx].dev;
 
     // IRN: disable timeouts when PFC is enabled to prevent spurious retransmissions
-    if (qp->irn.m_enabled && dev->IsQbbEnabled()) return;
+    // if (qp->irn.m_enabled && dev->IsQbbEnabled()) return;
 
-    if (acc_timeout_count.find(qp->m_flow_id) == acc_timeout_count.end())
-        acc_timeout_count[qp->m_flow_id] = 0;
-    acc_timeout_count[qp->m_flow_id]++;
+    // if (acc_timeout_count.find(qp->m_flow_id) == acc_timeout_count.end())
+    //     acc_timeout_count[qp->m_flow_id] = 0;
+    // acc_timeout_count[qp->m_flow_id]++;
 
-    if (qp->irn.m_enabled) qp->irn.m_recovery = true;
+    // if (qp->irn.m_enabled) qp->irn.m_recovery = true;
+
+    // std::cerr << "[Timeout] " << Simulator::Now() << " " << std::hex << qp->sip.Get() << " "
+    //           << qp->dip.Get() << " " << std::dec << qp->sport << " " << qp->dport << " "
+    //           << qp->snd_una << " " << qp->snd_nxt << std::endl;
 
     RecoverQueue(qp);
+
+    if (qp->m_retransmit.IsRunning()) qp->m_retransmit.Cancel();
+    qp->m_retransmit =
+        Simulator::Schedule(qp->GetRto(m_mtu), &RdmaHw::HandleTimeout, this, qp, qp->GetRto(m_mtu));
+
     dev->TriggerTransmit();
 }
 

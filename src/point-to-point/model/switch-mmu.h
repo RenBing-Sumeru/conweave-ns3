@@ -12,7 +12,6 @@
 #include "ns3/letflow-routing.h"
 #include "ns3/settings.h"
 
-
 namespace ns3 {
 
 class Packet;
@@ -34,6 +33,10 @@ class SwitchMmu : public Object {
     void UpdateEgressAdmission(uint32_t port, uint32_t qIndex, uint32_t psize);
     void RemoveFromIngressAdmission(uint32_t port, uint32_t qIndex, uint32_t psize);
     void RemoveFromEgressAdmission(uint32_t port, uint32_t qIndex, uint32_t psize);
+
+    uint32_t GetUsedEgressBytes(uint32_t port, uint32_t qIndex) {
+        return m_usedEgressQMinBytes[port][qIndex] + m_usedEgressQSharedBytes[port][qIndex];
+    }
 
     void SetPause(uint32_t port, uint32_t qIndex, uint32_t pause_time);
     void SetResume(uint32_t port, uint32_t qIndex);

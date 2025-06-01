@@ -96,11 +96,11 @@ if __name__=="__main__":
 		# BRIEF INFORMATION (<1BDP, >1BDP)
 		outfile_fct_summary.write("#1BDP={}Bytes\n".format(OneBDP))
 		outfile_fct_summary.write("#{:5},{:5},{:5},{:6},{:6},{:6}\n".format("Category", "Avg", "50%", "95%", "99%", "99.9%"))
-		outfile_fct_summary.write("{:5},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f}\n".format("<1BDP", np.average(fct_bdp), 
-																						np.percentile(fct_bdp, 50),
-																						np.percentile(fct_bdp, 95),
-																						np.percentile(fct_bdp, 99),
-																						np.percentile(fct_bdp, 99.9)))
+		# outfile_fct_summary.write("{:5},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f}\n".format("<1BDP", np.average(fct_bdp), 
+		# 																				np.percentile(fct_bdp, 50),
+		# 																				np.percentile(fct_bdp, 95),
+		# 																				np.percentile(fct_bdp, 99),
+		# 																				np.percentile(fct_bdp, 99.9)))
 		outfile_fct_summary.write("{:5},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f}\n".format(">1BDP", np.average(fct_over_bdp), 
 																						np.percentile(fct_over_bdp, 50),
 																						np.percentile(fct_over_bdp, 95),
@@ -157,11 +157,11 @@ if __name__=="__main__":
 		# BRIEF INFORMATION (<1BDP, >1BDP)
 		outfile_fct_summary.write("#1BDP={}Bytes\n".format(OneBDP))
 		outfile_fct_summary.write("#{:5},{:5},{:5},{:6},{:6},{:6}\n".format("Category", "Avg", "50%", "95%", "99%", "99.9%"))
-		outfile_fct_summary.write("{:5},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f}\n".format("<1BDP", np.average(fct_bdp), 
-																						np.percentile(fct_bdp, 50),
-																						np.percentile(fct_bdp, 95),
-																						np.percentile(fct_bdp, 99),
-																						np.percentile(fct_bdp, 99.9)))
+		# outfile_fct_summary.write("{:5},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f}\n".format("<1BDP", np.average(fct_bdp), 
+		# 																				np.percentile(fct_bdp, 50),
+		# 																				np.percentile(fct_bdp, 95),
+		# 																				np.percentile(fct_bdp, 99),
+		# 																				np.percentile(fct_bdp, 99.9)))
 		outfile_fct_summary.write("{:5},{:.3f},{:.3f},{:.3f},{:.3f},{:.3f}\n".format(">1BDP", np.average(fct_over_bdp), 
 																						np.percentile(fct_over_bdp, 50),
 																						np.percentile(fct_over_bdp, 95),
@@ -210,22 +210,22 @@ if __name__=="__main__":
 			var = str(bkt[0]) + " " + str(bkt[1]) + " " + str(bkt[2]) + " " + str(bkt[3]) + "\n"
 			outfile_fct_all_slowdown.write(var)
 
-	with open(output_fct_small_slowdown_cdf, "w") as outfile_fct_small_slowdown:
-		# up to here, `output` should be a string of multiple lines, each line is: fct, size
-		aa = output_slowdown.decode("utf-8").split('\n')[:-2]
-		##########################
-		### SLOWDOWN CDF SMALL ###
-		##########################
-		fct_arr = []
-		for x in aa:
-			i = int(x.split(" ")[1])
-			val = float(x.split(" ")[0])
-			if (i < OneBDP):
-				fct_arr.append(val)
-		fct_cdf = getCdfFromArray(fct_arr)
-		for bkt in fct_cdf:
-			var = str(bkt[0]) + " " + str(bkt[1]) + " " + str(bkt[2]) + " " + str(bkt[3]) + "\n"
-			outfile_fct_small_slowdown.write(var)
+	# with open(output_fct_small_slowdown_cdf, "w") as outfile_fct_small_slowdown:
+	# 	# up to here, `output` should be a string of multiple lines, each line is: fct, size
+	# 	aa = output_slowdown.decode("utf-8").split('\n')[:-2]
+	# 	##########################
+	# 	### SLOWDOWN CDF SMALL ###
+	# 	##########################
+	# 	fct_arr = []
+	# 	for x in aa:
+	# 		i = int(x.split(" ")[1])
+	# 		val = float(x.split(" ")[0])
+	# 		if (i < OneBDP):
+	# 			fct_arr.append(val)
+	# 	fct_cdf = getCdfFromArray(fct_arr)
+	# 	for bkt in fct_cdf:
+	# 		var = str(bkt[0]) + " " + str(bkt[1]) + " " + str(bkt[2]) + " " + str(bkt[3]) + "\n"
+	# 		outfile_fct_small_slowdown.write(var)
 
 	with open(output_fct_large_slowdown_cdf, "w") as outfile_fct_large_slowdown:
 		# up to here, `output` should be a string of multiple lines, each line is: fct, size
@@ -257,21 +257,21 @@ if __name__=="__main__":
 			var = str(bkt[0]) + " " + str(bkt[1]) + " " + str(bkt[2]) + " " + str(bkt[3]) + "\n"
 			outfile_fct_all_absolute.write(var)
 		
-	with open(output_fct_small_absolute_cdf, "w") as outfile_fct_small_absolute:
-		a = output_absolute.decode("utf-8").split('\n')[:-2]
-		##########################
-		### ABSOLUTE CDF SMALL ###
-		##########################
-		fct_arr = []
-		for x in a:
-			i = int(x.split(" ")[1])
-			val = float(x.split(" ")[0])
-			if (i < OneBDP):
-				fct_arr.append(val)
-		fct_cdf = getCdfFromArray(fct_arr)
-		for bkt in fct_cdf:
-			var = str(bkt[0]) + " " + str(bkt[1]) + " " + str(bkt[2]) + " " + str(bkt[3]) + "\n"
-			outfile_fct_small_absolute.write(var)
+	# with open(output_fct_small_absolute_cdf, "w") as outfile_fct_small_absolute:
+	# 	a = output_absolute.decode("utf-8").split('\n')[:-2]
+	# 	##########################
+	# 	### ABSOLUTE CDF SMALL ###
+	# 	##########################
+	# 	fct_arr = []
+	# 	for x in a:
+	# 		i = int(x.split(" ")[1])
+	# 		val = float(x.split(" ")[0])
+	# 		if (i < OneBDP):
+	# 			fct_arr.append(val)
+	# 	fct_cdf = getCdfFromArray(fct_arr)
+	# 	for bkt in fct_cdf:
+	# 		var = str(bkt[0]) + " " + str(bkt[1]) + " " + str(bkt[2]) + " " + str(bkt[3]) + "\n"
+	# 		outfile_fct_small_absolute.write(var)
 
 
 	with open(output_fct_large_absolute_cdf, "w") as outfile_fct_large_absolute:

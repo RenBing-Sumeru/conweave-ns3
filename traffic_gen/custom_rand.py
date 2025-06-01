@@ -8,7 +8,7 @@ class CustomRand:
 		if cdf[-1][1] != 100:
 			return False
 		for i in range(1, len(cdf)):
-			if cdf[i][1] <= cdf[i-1][1] or cdf[i][0] <= cdf[i-1][0]:
+			if cdf[i][1] <= cdf[i-1][1] or cdf[i][0] < cdf[i-1][0]:
 				return False
 		return True
 	def setCdf(self, cdf):

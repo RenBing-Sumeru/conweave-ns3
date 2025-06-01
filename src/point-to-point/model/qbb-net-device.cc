@@ -64,7 +64,7 @@ namespace ns3 {
 extern std::unordered_map<unsigned, Time> acc_pause_time;
 
 // uint32_t RdmaEgressQueue::ack_q_idx = 3; // 3: Middle priority
-uint32_t RdmaEgressQueue::ack_q_idx = 0; // 0: high priority
+uint32_t RdmaEgressQueue::ack_q_idx = 0;  // 0: high priority
 // RdmaEgressQueue
 TypeId RdmaEgressQueue::GetTypeId(void) {
     static TypeId tid =

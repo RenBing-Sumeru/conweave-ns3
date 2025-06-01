@@ -87,7 +87,7 @@ uint32_t SwitchNode::DoLbFlowECMP(Ptr<const Packet> p, const CustomHeader &ch,
 
 /*-----------------RPS-----------------*/
 uint32_t SwitchNode::DoLbRPS(Ptr<const Packet> p, const CustomHeader &ch,
-                                  const std::vector<int> &nexthops) {
+                             const std::vector<int> &nexthops) {
     // pick one next hop based on randomness
     uint32_t idx = rand() % nexthops.size();
     return nexthops[idx];
@@ -272,7 +272,7 @@ int SwitchNode::GetOutDev(Ptr<Packet> p, CustomHeader &ch) {
     }
 
     switch (Settings::lb_mode) {
-				case 1:
+        case 1:
             return DoLbRPS(p, ch, nexthops);
         case 2:
             return DoLbDrill(p, ch, nexthops);
@@ -300,9 +300,10 @@ void SwitchNode::DoSwitchSend(Ptr<Packet> p, CustomHeader &ch, uint32_t outDev, 
     /** NOTE:
      * ConWeave control packets have the high priority as ACK/NACK/PFC/etc with qIndex = 0.
      */
-    if (inDev == Settings::CONWEAVE_CTRL_DUMMY_INDEV) { // sanity check
+    if (inDev == Settings::CONWEAVE_CTRL_DUMMY_INDEV) {  // sanity check
         // ConWeave reply is on ACK protocol with high priority, so qIndex should be 0
-        assert(qIndex == 0 && m_ackHighPrio == 1 && "ConWeave's reply packet follows ACK, so its qIndex should be 0");
+        assert(qIndex == 0 && m_ackHighPrio == 1 &&
+               "ConWeave's reply packet follows ACK, so its qIndex should be 0");
     }
 
     if (qIndex != 0) {  // not highest priority
@@ -312,6 +313,29 @@ void SwitchNode::DoSwitchSend(Ptr<Packet> p, CustomHeader &ch, uint32_t outDev, 
                                              p->GetSize())) {  // Ingress Admission control
                 m_mmu->UpdateIngressAdmission(inDev, qIndex, p->GetSize());
                 m_mmu->UpdateEgressAdmission(outDev, qIndex, p->GetSize());
+
+                if (m_isToR && ch.l3Prot == 0x11 &&
+                    m_isToR_hostIP.find(ch.sip) == m_isToR_hostIP.end() &&
+                    m_isToR_hostIP.find(ch.dip) != m_isToR_hostIP.end()) {
+                    auto flow = std::make_tuple(ch.sip, ch.dip, ch.udp.sport, ch.udp.dport);
+
+                    m_seq[flow] = std::max(m_seq[flow], ch.udp.seq);
+                    m_delta[flow][inDev] = std::max(m_delta[flow][inDev], m_seq[flow] - ch.udp.seq);
+
+                    // if (m_seq[flow] - ch.udp.seq >= 56 * 1000) {
+                    //     std::cerr << "[DoSwitchSend] " << Simulator::Now() << " " << std::hex
+                    //               << ch.sip << " " << ch.dip << " " << std::dec << ch.udp.sport
+                    //               << " " << ch.udp.dport << " " << inDev << " " << outDev << " "
+                    //               << ch.udp.seq << " " << m_seq[flow] << std::endl;
+                    // }
+                }
+
+                // if (!m_isToR && ch.l3Prot == 0x11 && ch.udp.sport == 10062 && ch.udp.dport ==
+                // 153) {
+                //     std::cerr << "[Egress Enqueue] " << Simulator::Now() << " " << m_id << " "
+                //               << ch.udp.seq << " " << m_mmu->GetUsedEgressBytes(outDev, qIndex)
+                //               << std::endl;
+                // }
             } else { /** DROP: At Ingress */
 #if (0)
                 // /** NOTE: logging dropped pkts */
@@ -321,6 +345,11 @@ void SwitchNode::DoSwitchSend(Ptr<Packet> p, CustomHeader &ch, uint32_t outDev, 
                 //           << ",At " << Simulator::Now() << std::endl;
 #endif
                 Settings::dropped_pkt_sw_ingress++;
+                if (ch.l3Prot == 0x11) {
+                    std::cerr << "[DROP Ingress] " << " " << Simulator::Now() << " " << m_id << " " << std::hex
+                              << ch.sip << " " << ch.dip << " " << std::dec << ch.udp.sport << " "
+                              << ch.udp.dport << " " << ch.udp.seq << std::endl;
+                }
                 return;  // drop
             }
         } else { /** DROP: At Egress */
@@ -331,6 +360,11 @@ void SwitchNode::DoSwitchSend(Ptr<Packet> p, CustomHeader &ch, uint32_t outDev, 
             //           << Simulator::Now() << std::endl;
 #endif
             Settings::dropped_pkt_sw_egress++;
+            if (ch.l3Prot == 0x11) {
+                std::cerr << "[DROP Egress] " << " " << Simulator::Now() << " " << m_id << " " << std::hex
+                          << ch.sip << " " << ch.dip << " " << std::dec << ch.udp.sport << " " 
+													<< ch.udp.dport << " " << ch.udp.seq << std::endl;
+            }
             return;  // drop
         }
 
@@ -363,6 +397,17 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
                 p->AddHeader(ppp);
             }
         }
+
+        CustomHeader ch(CustomHeader::L2_Header | CustomHeader::L3_Header |
+                        CustomHeader::L4_Header);
+        p->PeekHeader(ch);
+
+        // if (!m_isToR && ch.l3Prot == 0x11 && ch.udp.sport == 10062 && ch.udp.dport == 153) {
+        //     std::cerr << "[Egress Dequeue] " << Simulator::Now() << " " << m_id << " " <<
+        //     ch.udp.seq
+        //               << std::endl;
+        // }
+
         // NOTE: ConWeave's probe/reply does not need to pass inDev interface
         if (inDev != Settings::CONWEAVE_CTRL_DUMMY_INDEV) {
             CheckAndSendResume(inDev, qIndex);
