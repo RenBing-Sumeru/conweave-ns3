@@ -194,10 +194,11 @@ RdmaRxQueuePair::RdmaRxQueuePair() {
     sip = dip = sport = dport = 0;
     m_ipid = 0;
     ReceiverNextExpectedSeq = 0;
+    ReceiverHighestSeq = 0;
     m_nackTimer = Time(0);
     m_milestone_rx = 0;
     m_lastNACK = -1;
-    m_buffer = 32;
+    m_buffer = 128;
 }
 
 uint32_t RdmaRxQueuePair::GetHash(void) {

@@ -19,7 +19,7 @@ class Packet;
 class SwitchMmu : public Object {
    public:
     static const unsigned qCnt = 8;    // Number of queues/priorities used
-    static const unsigned pCnt = 128;  // port 0 is not used so + 1	// Number of ports used
+    static const unsigned pCnt = 256;  // port 0 is not used so + 1	// Number of ports used
     static const unsigned MTU = 1048;  // 1000 + headers
 
     static TypeId GetTypeId(void);

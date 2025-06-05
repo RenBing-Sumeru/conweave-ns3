@@ -150,9 +150,9 @@ bool SwitchMmu::CheckIngressAdmission(uint32_t port, uint32_t qIndex, uint32_t p
                 m_pg_hdrm_limit[port])  // exceed headroom space
             {
                 if (m_PFCenabled) {
-										std::cerr << "WARNING: Drop because ingress headroom full:"
-															<< m_usedIngressPGHeadroomBytes[port][qIndex] << "\t"
-															<< m_pg_hdrm_limit[port] << "\n";
+                    std::cerr << "WARNING: Drop because ingress headroom full:"
+                              << m_usedIngressPGHeadroomBytes[port][qIndex] << "\t"
+                              << m_pg_hdrm_limit[port] << "\n";
                 }
                 return false;
             }
@@ -200,7 +200,7 @@ bool SwitchMmu::CheckEgressAdmission(uint32_t port, uint32_t qIndex, uint32_t ps
         //           << ". Natural if not using PFC"
         //           << std::endl;
 #endif
-        threshold = false;
+        // threshold = false;
         // drop because it exceeds threshold
     }
     return threshold;

@@ -264,8 +264,9 @@ int SwitchNode::GetOutDev(Ptr<Packet> p, CustomHeader &ch) {
 
     // entry found
     const auto &nexthops = entry->second;
-    bool control_pkt =
-        (ch.l3Prot == 0xFF || ch.l3Prot == 0xFE || ch.l3Prot == 0xFD || ch.l3Prot == 0xFC);
+    // bool control_pkt =
+    //     (ch.l3Prot == 0xFF || ch.l3Prot == 0xFE || ch.l3Prot == 0xFD || ch.l3Prot == 0xFC);
+    bool control_pkt = (ch.l3Prot == 0xFF || ch.l3Prot == 0xFE);
 
     if (Settings::lb_mode == 0 || control_pkt) {  // control packet (ACK, NACK, PFC, QCN)
         return DoLbFlowECMP(p, ch, nexthops);     // ECMP routing path decision (4-tuple)
@@ -329,7 +330,6 @@ void SwitchNode::DoSwitchSend(Ptr<Packet> p, CustomHeader &ch, uint32_t outDev, 
                     //               << ch.udp.seq << " " << m_seq[flow] << std::endl;
                     // }
                 }
-
                 // if (!m_isToR && ch.l3Prot == 0x11 && ch.udp.sport == 10062 && ch.udp.dport ==
                 // 153) {
                 //     std::cerr << "[Egress Enqueue] " << Simulator::Now() << " " << m_id << " "
@@ -346,9 +346,10 @@ void SwitchNode::DoSwitchSend(Ptr<Packet> p, CustomHeader &ch, uint32_t outDev, 
 #endif
                 Settings::dropped_pkt_sw_ingress++;
                 if (ch.l3Prot == 0x11) {
-                    std::cerr << "[DROP Ingress] " << " " << Simulator::Now() << " " << m_id << " " << std::hex
-                              << ch.sip << " " << ch.dip << " " << std::dec << ch.udp.sport << " "
-                              << ch.udp.dport << " " << ch.udp.seq << std::endl;
+                    std::cerr << "[DROP Ingress] " << " " << Simulator::Now() << " " << m_id << " "
+                              << std::hex << ch.sip << " " << ch.dip << " " << std::dec
+                              << ch.udp.sport << " " << ch.udp.dport << " " << ch.udp.seq
+                              << std::endl;
                 }
                 return;  // drop
             }
@@ -361,15 +362,29 @@ void SwitchNode::DoSwitchSend(Ptr<Packet> p, CustomHeader &ch, uint32_t outDev, 
 #endif
             Settings::dropped_pkt_sw_egress++;
             if (ch.l3Prot == 0x11) {
-                std::cerr << "[DROP Egress] " << " " << Simulator::Now() << " " << m_id << " " << std::hex
-                          << ch.sip << " " << ch.dip << " " << std::dec << ch.udp.sport << " " 
-													<< ch.udp.dport << " " << ch.udp.seq << std::endl;
+                std::cerr << "[DROP Egress] " << " " << Simulator::Now() << " " << m_id << " "
+                          << std::hex << ch.sip << " " << ch.dip << " " << std::dec << ch.udp.sport
+                          << " " << ch.udp.dport << " " << ch.udp.seq << std::endl;
             }
             return;  // drop
         }
 
         CheckAndSendPfc(inDev, qIndex);
     }
+
+		if (ch.l3Prot == 0x11) {
+				std::cerr << "[DoSwitchSend UDP] " << Simulator::Now() << " " << m_id << " "
+									<< std::hex << ch.sip << " " << ch.dip << " " << std::dec
+									<< ch.udp.sport << " " << ch.udp.dport << " " << inDev << " "
+									<< outDev << " " << qIndex << " " << ch.udp.seq << " "
+									<< m_mmu->GetUsedEgressBytes(outDev, qIndex) << std::endl;
+		} else if (ch.l3Prot == 0xFC || ch.l3Prot == 0xFD) {
+				std::cerr << "[DoSwitchSend ACK] " << Simulator::Now() << " " << m_id << " "
+									<< std::hex << ch.sip << " " << ch.dip << " " << std::dec
+									<< ch.ack.sport << " " << ch.ack.dport << " " << inDev << " "
+									<< outDev << " " << qIndex << " " << ch.ack.seq << " "
+									<< m_mmu->GetUsedEgressBytes(outDev, qIndex) << std::endl;
+		}
 
     m_devices[outDev]->SwitchSend(qIndex, p, ch);
 }

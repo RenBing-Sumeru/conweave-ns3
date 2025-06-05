@@ -203,6 +203,7 @@ class RdmaRxQueuePair : public Object {  // Rx side queue pair
     uint16_t sport, dport;
     uint16_t m_ipid;
     uint32_t ReceiverNextExpectedSeq;
+    uint32_t ReceiverHighestSeq;
     Time m_nackTimer;
     int32_t m_milestone_rx;
     uint32_t m_lastNACK;

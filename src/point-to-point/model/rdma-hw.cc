@@ -206,7 +206,7 @@ void RdmaHw::AddQueuePair(uint64_t size, uint16_t pg, Ipv4Address sip, Ipv4Addre
     m_qpMap[key] = qp;
 
     // set init variables
-    DataRate m_bps = m_nic[nic_idx].dev->GetDataRate();
+    DataRate m_bps = m_nic[nic_idx].dev->GetDataRate() * 0.94;
     qp->m_rate = m_bps;
     qp->m_max_rate = m_bps;
     if (m_cc_mode == 1) {
@@ -324,14 +324,15 @@ int RdmaHw::ReceiveUdp(Ptr<Packet> p, CustomHeader &ch) {
         }
     }
 
+    // if (ch.udp.sport == 10066 && ch.udp.dport == 161) {
+    std::cerr << "[ReceiveUdp] " << Simulator::Now() << " " << std::hex << ch.sip << " " << ch.dip
+              << " " << std::dec << ch.udp.sport << " " << ch.udp.dport << " "
+              << rxQp->ReceiverNextExpectedSeq << " " << rxQp->ReceiverHighestSeq << " "
+              << ch.udp.seq << std::endl;
+    // }
+
     bool cnp_check = false;
     int x = ReceiverCheckSeq(ch.udp.seq, rxQp, payload_size, cnp_check);
-
-    // if (ch.udp.sport == 10066 && ch.udp.dport == 161) {
-    //     std::cerr << "[ReceiveUdp] " << Simulator::Now() << " " << std::hex << ch.sip << " "
-    //               << ch.dip << " " << std::dec << ch.udp.sport << " " << ch.udp.dport << " "
-    //               << rxQp->ReceiverNextExpectedSeq << " " << ch.udp.seq << " " << x << std::endl;
-    // }
 
     if (x == 1 || x == 2 || x == 3 || x == 6) {  // generate ACK or NACK
         qbbHeader seqh;
@@ -640,6 +641,10 @@ int RdmaHw::ReceiverCheckSeq(uint32_t seq, Ptr<RdmaRxQueuePair> q, uint32_t size
     if (seq == expected || (seq < expected && seq + size >= expected)) {
         if (m_irn) {
             if (q->m_milestone_rx < seq + size) q->m_milestone_rx = seq + size;
+
+            if (q->ReceiverHighestSeq < seq + size) {
+                q->ReceiverHighestSeq = seq + size;
+            }
             q->ReceiverNextExpectedSeq += size - (expected - seq);
             {
                 uint32_t sack_seq, sack_len;
@@ -676,6 +681,9 @@ int RdmaHw::ReceiverCheckSeq(uint32_t seq, Ptr<RdmaRxQueuePair> q, uint32_t size
         if (m_irn && seq + size <= expected + m_mtu * q->m_buffer) {
             if (q->m_milestone_rx < seq + size) q->m_milestone_rx = seq + size;
 
+            if (q->ReceiverHighestSeq < seq + size) {
+                q->ReceiverHighestSeq = seq + size;
+            }
             // if seq is already nacked, check for nacktimer
             if (q->m_irn_sack_.blockExists(seq, size) && Simulator::Now() < q->m_nackTimer) {
                 return 4;  // don't need to send nack yet

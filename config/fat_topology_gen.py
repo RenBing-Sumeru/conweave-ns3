@@ -1,4 +1,4 @@
-k_fat = 12
+k_fat = 4
 oversubscript = 1 # over-subscription between ToR uplink - downlink
 link_rate = 100 # Gbps
 link_latency = 1000 # ns

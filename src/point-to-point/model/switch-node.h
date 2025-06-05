@@ -17,7 +17,7 @@ class Packet;
 
 class SwitchNode : public Node {
     static const unsigned qCnt = 8;    // Number of queues/priorities used
-    static const unsigned pCnt = 128;  // port 0 is not used so + 1	// Number of ports used
+    static const unsigned pCnt = 256;  // port 0 is not used so + 1	// Number of ports used
     uint32_t m_ecmpSeed;
     std::unordered_map<uint32_t, std::vector<int>>
         m_rtTable;  // map from ip address (u32) to possible ECMP port (index of dev)
