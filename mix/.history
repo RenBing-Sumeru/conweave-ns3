@@ -523,3 +523,7 @@
 ./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/54433070/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/54433070/config.log 2>&1
 ./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/54433070/config.txt'
 
+06/05/25,658109842,1,1,1000,4,16,64,400,1,1,0,0,leaf_spine_64_100G_OS1,100,all2allv,100,0.002
+./waf --run 'scratch/network-load-balance /root/Huawei/ns-arimase/ns-3.19/mix/output/658109842/config.txt' > /root/Huawei/ns-arimase/ns-3.19/mix/output/658109842/config.log 2>&1
+./waf --run 'scratch/network-load-balance' --command-template='gdb --args %s /root/Huawei/ns-arimase/ns-3.19/mix/output/658109842/config.txt'
+

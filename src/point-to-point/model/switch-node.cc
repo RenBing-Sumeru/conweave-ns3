@@ -89,8 +89,22 @@ uint32_t SwitchNode::DoLbFlowECMP(Ptr<const Packet> p, const CustomHeader &ch,
 uint32_t SwitchNode::DoLbRPS(Ptr<const Packet> p, const CustomHeader &ch,
                              const std::vector<int> &nexthops) {
     // pick one next hop based on randomness
-    uint32_t idx = rand() % nexthops.size();
-    return nexthops[idx];
+    // uint32_t idx = rand() % nexthops.size();
+    // return nexthops[idx];
+
+    uint32_t leastLoadInterface = 0;
+    uint32_t leastLoad = std::numeric_limits<uint32_t>::max();
+    auto rand_nexthops = nexthops;
+    std::random_shuffle(rand_nexthops.begin(), rand_nexthops.end());
+
+    for (uint32_t samplePort = 0; samplePort < rand_nexthops.size(); samplePort++) {
+        uint32_t sampleLoad = CalculateInterfaceLoad(rand_nexthops[samplePort]);
+        if (sampleLoad < leastLoad) {
+            leastLoad = sampleLoad;
+            leastLoadInterface = rand_nexthops[samplePort];
+        }
+    }
+    return leastLoadInterface;
 }
 
 /*-----------------CONGA-----------------*/
@@ -372,19 +386,17 @@ void SwitchNode::DoSwitchSend(Ptr<Packet> p, CustomHeader &ch, uint32_t outDev, 
         CheckAndSendPfc(inDev, qIndex);
     }
 
-		if (ch.l3Prot == 0x11) {
-				std::cerr << "[DoSwitchSend UDP] " << Simulator::Now() << " " << m_id << " "
-									<< std::hex << ch.sip << " " << ch.dip << " " << std::dec
-									<< ch.udp.sport << " " << ch.udp.dport << " " << inDev << " "
-									<< outDev << " " << qIndex << " " << ch.udp.seq << " "
-									<< m_mmu->GetUsedEgressBytes(outDev, qIndex) << std::endl;
-		} else if (ch.l3Prot == 0xFC || ch.l3Prot == 0xFD) {
-				std::cerr << "[DoSwitchSend ACK] " << Simulator::Now() << " " << m_id << " "
-									<< std::hex << ch.sip << " " << ch.dip << " " << std::dec
-									<< ch.ack.sport << " " << ch.ack.dport << " " << inDev << " "
-									<< outDev << " " << qIndex << " " << ch.ack.seq << " "
-									<< m_mmu->GetUsedEgressBytes(outDev, qIndex) << std::endl;
-		}
+    // if (ch.l3Prot == 0x11) {
+    //     std::cerr << "[DoSwitchSend UDP] " << Simulator::Now() << " " << m_id << " " << std::hex
+    //               << ch.sip << " " << ch.dip << " " << std::dec << ch.udp.sport << " "
+    //               << ch.udp.dport << " " << inDev << " " << outDev << " " << qIndex << " "
+    //               << ch.udp.seq << " " << m_mmu->GetUsedEgressBytes(outDev, qIndex) << std::endl;
+    // } else if (ch.l3Prot == 0xFC || ch.l3Prot == 0xFD) {
+    //     std::cerr << "[DoSwitchSend ACK] " << Simulator::Now() << " " << m_id << " " << std::hex
+    //               << ch.sip << " " << ch.dip << " " << std::dec << ch.ack.sport << " "
+    //               << ch.ack.dport << " " << inDev << " " << outDev << " " << qIndex << " "
+    //               << ch.ack.seq << " " << m_mmu->GetUsedEgressBytes(outDev, qIndex) << std::endl;
+    // }
 
     m_devices[outDev]->SwitchSend(qIndex, p, ch);
 }
